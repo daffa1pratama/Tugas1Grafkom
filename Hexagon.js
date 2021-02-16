@@ -2,17 +2,15 @@
 var canvas = document.getElementById("webgl-canvas");
 var gl = canvas.getContext('experimental-webgl');
 
-class Octagon {
+class Hexagon {
     constructor(r, g, b, o) {
         // Titik titik
         this.vertices = [
             -0.25, 0.5,
-            -0.5, 0.25,
-            -0.5, -0.25,
+            -0.5, 0,
             -0.25, -0.5,
             0.25, -0.5,
-            0.5, -0.25,
-            0.5, 0.25,
+            0.5, 0,
             0.25, 0.5
         ];
 
@@ -60,16 +58,16 @@ class Octagon {
         gl.enableVertexAttribArray(coordinate);
     }
 
-    drawOctagon() {
+    drawHexagon() {
         // draw polygon
         this.init();
         gl.clearColor(1.0, 1.0, 1.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.viewport(0, 0, canvas.width, canvas.height);
-        gl.drawArrays( gl.TRIANGLE_FAN, 0, 8);
+        gl.drawArrays( gl.TRIANGLE_FAN, 0, 6);
     }
 }
 
-let oct = new Octagon(0.0, 0.0, 1.0, 1.0);
-oct.drawOctagon();
+let hex = new Hexagon(0.0, 0.0, 1.0, 1.0);
+hex.drawHexagon();
