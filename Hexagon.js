@@ -1,6 +1,9 @@
 // Load canvas
 var canvas = document.getElementById("webgl-canvas");
 var gl = canvas.getContext('experimental-webgl');
+let red = (document.getElementById("R").value) / 50;
+let green = (document.getElementById("G").value) / 50;
+let blue = (document.getElementById("B").value) / 50;
 
 class Hexagon {
     constructor(r, g, b, o) {
@@ -15,6 +18,12 @@ class Hexagon {
         ];
 
         this.color = new Array(r, g, b, o);
+    }
+
+    changeColor(r, g, b) {
+        this.color[0] = r;
+        this.color[1] = g;
+        this.color[2] = b;
     }
 
     init() {
@@ -69,5 +78,13 @@ class Hexagon {
     }
 }
 
-let hex = new Hexagon(0.0, 0.0, 1.0, 1.0);
+let hex = new Hexagon(red, green, blue, 1.0);
 hex.drawHexagon();
+
+function onButtonChange() { 
+    red = (document.getElementById("R").value) / 50;
+    green = (document.getElementById("G").value) / 50;
+    blue = (document.getElementById("B").value) / 50;
+    hex.changeColor(red, green, blue);
+    hex.drawHexagon();
+}
