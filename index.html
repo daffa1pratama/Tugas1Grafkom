@@ -10,11 +10,21 @@
 </head>
 
 <body>
-  <div class="container">
+  <div> 
     <h1 class="title">Tugas 1 IF3260</h1>
+  </div>
+  <div>
+    <h3>Input Line</h3>
+    <label for="vertex1">Titik 1</label>
+    <input type="text" name="vertex1" id="vertex1">
+    <label for="vertex2">Titik 2</label>
+    <input type="text" name="vertex2" id="vertex2">
+    <button onclick="drawLine()">Draw Line!</button>
+  </div>
+  <div class="container">
     <canvas width="1200" height="800" id="webgl-canvas"></canvas>
   </div>
-  <script src="js/test.js"></script>
+  <script type="text/javascript" src="line.js"></script>
 </body>
 
 </html>
