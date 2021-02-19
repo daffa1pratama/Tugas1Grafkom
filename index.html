@@ -13,20 +13,24 @@
   <div> 
     <h1 class="title">Tugas 1 IF3260</h1>
   </div>
+  <div>
+    <h3> Select </h3>
+    <select id="choice">
+      <option value="hexa"> Hexagon </option>
+      <option value="octa"> Octagon </option>
+    </select>
+    <button onclick="onSelect()"> Select </button>
+  </div>
   <div> 
     <h3> Color Mixer </h3>
-    <label> Red </label>
-    <input type="range" id="R" min="0" max="50">
-    <label> Green </label>
-    <input type="range" id="G" min="0" max="50">
-    <label> Blue </label>
-    <input type="range" id="B" min="0" max="50">
+    <label for="colorPicker">Change Color : </label>
+    <input id="colorPicker" type="color" value="#ff0000">
     <button onclick="onButtonChange()"> Change! </button>
-  </div>
+  </div> <br>
   <div class="container">
     <canvas width="1200" height="800" id="webgl-canvas"></canvas>
   </div>
-  <script type="text/javascript" src="Hexagon.js"></script>
+  <script type="text/javascript" src="Polygon.js"></script>
 </body>
 
 </html>
