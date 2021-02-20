@@ -15,15 +15,15 @@ body {
   text-align: center;
 }
 
-.form {
+.input-group {
   display: flex;
+  margin-bottom: 12px;
 }
 
 .field {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 12px;
   margin-right: 8px;
 }
 

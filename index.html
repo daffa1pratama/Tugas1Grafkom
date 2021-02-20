@@ -12,15 +12,26 @@
 <body>
   <div class="container">
     <h1 class="title">Tugas 1 IF3260</h1>
-    <div class="form">
+    <div class="input-group">
       <div class="field">
-        <label for="colorPicker" >Color : </label>
+        <label for="colorPicker">Color : </label>
         <input id="colorPicker" name="colorPicker" type="color" value="#000000">
       </div>
       <div class="field">
-        <label for="squareSize">Square Size : </label>
-        <input name="squareSize" id="squareSize" type="range" min="0" max="100" value="50">
+        <label for="squareSize">Size : </label>
+        <input name="squareSize" id="squareSize" type="range" min="0" max="100" value="25">
       </div>
+    </div>
+    <div class="input-group">
+      <span>Mode : </span>
+      <input type="radio" id="create" name="mode" value="CREATE" checked>
+      <label for="create">Create</label>
+      <input type="radio" id="move" name="mode" value="MOVE">
+      <label for="edit">Move</label>
+      <input type="radio" id="resize" name="mode" value="RESIZE">
+      <label for="resize">Resize</label>
+      <input type="radio" id="updateColor" name="mode" value="UPDATE_COLOR">
+      <label for="resize">Update Color</label>
     </div>
     <canvas width="800" height="800" id="webgl-canvas">
       Oops ... your browser doesn't support the HTML5 canvas element

@@ -61,11 +61,6 @@ function clearCanvas() {
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
-function drawPrimitives() {
-  // Draw the triangle
-  gl.drawArrays(gl.POINTS, 0, 1);
-}
-
 function hexToRgb(hex) {
   return hex
     .replace(

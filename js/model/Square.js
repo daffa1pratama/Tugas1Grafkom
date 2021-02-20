@@ -20,12 +20,18 @@ class Square {
     ];
   }
 
-  resize() {
-    
+  isCoordinateInside(canvasCoordinate) {
+    // check if coordinate inside square object
+    return canvasCoordinate.x >= this.left && canvasCoordinate.x <= this.right &&
+      canvasCoordinate.y >= this.bottom && canvasCoordinate.y <= this.top
   }
 
-  move() {
+  resize() {
 
+  }
+
+  move(newCenterPoint) {
+    this.calculateEdgesPosition(newCenterPoint);
   }
 
   render() {
