@@ -62,9 +62,9 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
     glObjects.selectedObject
       ? glObjects.updateSelectedObject(null)
       : glObjects.updateSelectedObject(translatedMidPoint);
-  } else if (getMode() === MODE.UPDATE_COLOR) {
+  } else if (getMode() === MODE.UPDATE_COLOR || getMode() === MODE.RESIZE) {
     glObjects.updateSelectedObject(translatedMidPoint);
-    glObjects.updateSelectedObjectColor();
+    getMode() === MODE.UPDATE_COLOR ? glObjects.updateSelectedObjectColor() : glObjects.resizeSelectedObject();
     glObjects.updateSelectedObject(null);
   }
 };
@@ -94,6 +94,10 @@ class glObjects {
 
   updateSelectedObjectColor() {
     this.selectedObject.color = this.controlPoint.color;
+  }
+
+  resizeSelectedObject() {
+    this.selectedObject.resize(getSquareSize());
   }
 
   renderAll() {

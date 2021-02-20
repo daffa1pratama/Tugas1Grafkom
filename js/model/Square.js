@@ -2,6 +2,7 @@ class Square {
   constructor(centerPoint, size = 1, color = "#000000") {
     this.color = color;
     this.size = size;
+    this.centerPoint = centerPoint;
     this.indices = [3, 2, 1, 3, 1, 0];
     this.calculateEdgesPosition(centerPoint);
   }
@@ -26,11 +27,13 @@ class Square {
       canvasCoordinate.y >= this.bottom && canvasCoordinate.y <= this.top
   }
 
-  resize() {
-
+  resize(newSize) {
+    this.size = newSize;
+    this.calculateEdgesPosition(this.centerPoint);
   }
 
   move(newCenterPoint) {
+    this.centerPoint = newCenterPoint;
     this.calculateEdgesPosition(newCenterPoint);
   }
 
