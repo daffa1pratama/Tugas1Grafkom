@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background-color: #6495ed;
+  background-color: #d39a4f;
 }
 
 .container {
@@ -15,14 +15,18 @@ body {
   text-align: center;
 }
 
-.colorPicker {
+.form {
+  display: flex;
+}
+
+.field {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
+  margin-right: 8px;
 }
 
 #webgl-canvas {
   border-radius: 12px;
-  /* background-color: #fff; */
 }

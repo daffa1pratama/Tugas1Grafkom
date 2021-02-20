@@ -20,6 +20,14 @@ class Square {
     ];
   }
 
+  resize() {
+    
+  }
+
+  move() {
+
+  }
+
   render() {
     const vertexBuffer = createVertexBuffer(this.vertices);
     const indexBuffer = createIndexBuffer(this.indices);
