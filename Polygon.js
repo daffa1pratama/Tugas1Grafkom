@@ -5,8 +5,7 @@ let color = hexToRgb(document.getElementById("colorPicker").value);
 let red = color[0] / 255;
 let green = color[1] / 255;
 let blue = color[2] / 255;
-console.log(color);
-let object = null;
+let object = [];
 
 class Hexagon {
     constructor(r, g, b, o) {
@@ -73,10 +72,10 @@ class Hexagon {
     draw() {
         // draw polygon
         this.init();
-        gl.clearColor(1.0, 1.0, 1.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.viewport(0, 0, canvas.width, canvas.height);
+        // gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        // gl.enable(gl.DEPTH_TEST);
+        // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        // gl.viewport(0, 0, canvas.width, canvas.height);
         gl.drawArrays( gl.TRIANGLE_FAN, 0, 6);
     }
 }
@@ -85,14 +84,14 @@ class Octagon {
     constructor(r, g, b, o) {
         // Titik titik
         this.vertices = [
-            -0.25, 0.5,
             -0.5, 0.25,
-            -0.5, -0.25,
-            -0.25, -0.5,
+            -0.75, 0,
+            -0.75, -0.5,
+            -0.5, -0.75,
+            0, -0.75,
             0.25, -0.5,
-            0.5, -0.25,
-            0.5, 0.25,
-            0.25, 0.5
+            0.25, 0,
+            0, 0.25
         ];
 
         this.color = new Array(r, g, b, o);
@@ -105,12 +104,6 @@ class Octagon {
     }
 
     init() {
-        // Buffer
-        var vertex_buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
         // Shader
         var vertexCode =
             'attribute vec4 coordinates;' +
@@ -138,6 +131,12 @@ class Octagon {
         gl.linkProgram(shaderProgram);
         gl.useProgram(shaderProgram);
 
+        // Buffer
+        var vertex_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+        //gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        
         // Combine shader and buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
         var coordinate = gl.getAttribLocation(shaderProgram, "coordinates");
@@ -148,10 +147,10 @@ class Octagon {
     draw() {
         // draw polygon
         this.init();
-        gl.clearColor(1.0, 1.0, 1.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.viewport(0, 0, canvas.width, canvas.height);
+        // gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        // gl.enable(gl.DEPTH_TEST);
+        // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        // gl.viewport(0, 0, canvas.width, canvas.height);
         gl.drawArrays( gl.TRIANGLE_FAN, 0, 8);
     }
 }
@@ -161,19 +160,32 @@ function onButtonChange() {
     red = color[0] / 255;
     green = color[1] / 255;
     blue = color[2] / 255;
-    object.changeColor(red, green, blue);
-    object.draw();
+    object[1].changeColor(red, green, blue);
+    //object[1].draw();
+    renderAll();
 }
 
 function onSelect() {
     //console.log(document.getElementById("choice").value);
     let choice = document.getElementById("choice").value;
     if (choice == 'hexa') {
-        object = new Hexagon(red, green, blue, 1.0);
-        object.draw();
+        hex = new Hexagon(red, green, blue, 1.0);
+        object.push(hex);
     } else {
-        object = new Octagon(red, green, blue, 1.0);
-        object.draw();
+        oct = new Octagon(red, green, blue, 1.0);
+        object.push(oct);
+    }
+    console.log(object.length);
+    renderAll();
+}
+
+function renderAll() {
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i< object.length; i++) {
+        object[i].draw();
     }
 }
 
