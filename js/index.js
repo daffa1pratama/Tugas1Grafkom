@@ -33,6 +33,28 @@ function drawLine() {
   glObjects.renderAll();
 }
 
+document.getElementById('inputfile').addEventListener('change', function() {   
+  var fr = new FileReader(); 
+  fr.onload = function(){ 
+      var inputValue = fr.result.split('\n');
+      var color = inputValue.pop();
+      var parsedInput = [];
+      var parsedVertex = [];
+      inputValue.forEach(element1 => {
+        parsedInput = element1.split(' ');
+        parsedInput.forEach(element2 => {
+          parsedVertex.push(parseFloat(element2));
+        });
+      });
+      console.log(parsedVertex);
+      console.log(color);
+      glObjects.push(new Line(parsedVertex, color));
+      glObjects.renderAll();
+      
+  } 
+  fr.readAsText(this.files[0]); 
+})
+
 const canvas = document.getElementById("webgl-canvas");
 gl = canvas.getContext("webgl");
 gl.viewport(0, 0, canvas.width, canvas.height);
