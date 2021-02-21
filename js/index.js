@@ -64,8 +64,12 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
       : glObjects.updateSelectedObject(translatedMidPoint);
   } else if (getMode() === MODE.UPDATE_COLOR || getMode() === MODE.RESIZE) {
     glObjects.updateSelectedObject(translatedMidPoint);
-    getMode() === MODE.UPDATE_COLOR ? glObjects.updateSelectedObjectColor() : glObjects.resizeSelectedObject();
-    glObjects.updateSelectedObject(null);
+    if (getMode() === MODE.UPDATE_COLOR) {
+      glObjects.updateSelectedObjectColor();
+      glObjects.updateSelectedObject(null);
+    } else {
+      glObjects.resizeSelectedObject();
+    }
   }
 };
 
@@ -73,6 +77,13 @@ document.getElementById(COLOR_PICKER_ID).onchange = function () {
   glObjects.controlPoint.color = this.value;
   glObjects.renderAll();
 };
+
+document.getElementById(SQUARE_SIZE_ID).oninput = function () {
+  if (getMode() === MODE.RESIZE && glObjects.selectedObject) {
+    glObjects.resizeSelectedObject();
+    glObjects.renderAll();
+  }
+}
 
 class glObjects {
   constructor(controlPoint) {
@@ -104,6 +115,11 @@ class glObjects {
     clearCanvas();
     this.controlPoint.render();
     this.objects.forEach((object) => object.render());
+    if (this.selectedObject) {
+      document.getElementById("anyObjectSelected").innerHTML = '<b>An Object has Selected!</b>';
+    } else {
+      document.getElementById("anyObjectSelected").innerHTML = 'No Object has Selected';
+    }
   }
 }
 

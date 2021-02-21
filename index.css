@@ -30,3 +30,8 @@ body {
 #webgl-canvas {
   border-radius: 12px;
 }
+
+#anyObjectSelected {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
