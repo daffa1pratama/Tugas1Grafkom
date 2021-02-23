@@ -31,7 +31,7 @@ class Hexagon {
     }
 
     isCoordinateInside(canvasCoordinate) {
-        return canvasCoordinate.x 
+        return false;
     }
 
     move(newCenterPoint) {
@@ -91,9 +91,9 @@ class Octagon {
         ];
     }
 
-    // isCoordinateInside(canvasCoordinate) {
-    //     return 
-    // }
+    isCoordinateInside(canvasCoordinate) {
+        return false;
+    }
 
     move(newCenterPoint) {
         this.centerPoint = newCenterPoint;
@@ -133,6 +133,10 @@ class Polygon {
                 this.vertices.push(0);
             }
         }
+    }
+
+    isCoordinateInside(canvasCoordinate) {
+        return false;
     }
 
     move(newCenterPoint) {
