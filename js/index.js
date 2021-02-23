@@ -56,6 +56,8 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
         getSquareSize(),
         glObjects.controlPoint.color
       )
+      // new Hexagon(translatedMidPoint, glObjects.controlPoint.color)
+      // new Octagon(translatedMidPoint, glObjects.controlPoint.color)
     );
     glObjects.renderAll();
   } else if (getMode() === MODE.MOVE) {
@@ -147,13 +149,17 @@ var upload = document.getElementById('inputfile');
           var result = JSON.parse(reader.result); // Parse the result into an object 
           
           console.log(result);
-          console.log(result.model);
-          console.log(result.vertices);
-          console.log(result.color);
-          
-          if (result.model == "Line") {
-            glObjects.push(new Line(result.vertices, result.color));
-            glObjects.renderAll();
+          // console.log(result.model);
+          // console.log(result.vertices);
+          // console.log(result.color);
+          for (let j=0; j<result.length; j++) {
+            if (result[j].model == "Line") {
+              glObjects.push(new Line(result[j].vertices, result[j].color));
+              glObjects.renderAll();
+            } else {
+              glObjects.push(new Polygon(result[j].vertices, result[j].color));
+              glObjects.renderAll();
+            }
           }
         });
 
