@@ -63,7 +63,7 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
     event.clientX,
     event.clientY
   );
-  if (glObjects.selectedModel === MODEL.SQUARE || glObjects.selectedModel === MODEL.POLYGON) {
+  if (glObjects.selectedModel === MODEL.SQUARE || glObjects.selectedModel === MODEL.POLYGON || glObjects.selectedModel === MODEL.HEXAGON || glObjects.selectedModel === MODEL.OCTAGON) {
     handleCanvasClickForSquareAndPolygon(cursorPoint);
   } else if (glObjects.selectedModel === MODEL.LINE) {
     handleCanvasClickForLine(cursorPoint);
@@ -150,52 +150,6 @@ document.getElementById(SQUARE_SIZE_ID).oninput = function () {
   }
 }
 
-function drawLine() {
-  var vertex1 = document.getElementById("vertex1").value;
-  var vertex2 = document.getElementById("vertex2").value;
-  var parsedVertex = [];
-
-  vertex1 = vertex1.split(" ");
-  vertex1.forEach(element => {
-    parsedVertex.push(parseFloat(element));
-  });
-  
-  vertex2 = vertex2.split(" ");
-  vertex2.forEach(element => {
-    parsedVertex.push(parseFloat(element));
-  });
-  
-  glObjects.push(new Line(parsedVertex));
-  glObjects.renderAll();
-}
-
-function editLine(x) {
-  var newVertex = document.getElementById("newvertex").value;
-  var obj = glObjects.objects[glObjects.objects.length - 1];
-  console.log(obj.vertices);
-
-  var parsedVertex = [];
-
-  newVertex = newVertex.split(" ");
-  newVertex.forEach(element => {
-    parsedVertex.push(parseFloat(element));
-  });
-
-  if (x == 1) {
-    for (let i = 0; i < 3; i++) {
-      obj.vertices[i] = parsedVertex[i];
-    }
-  } else {
-    for (let i = 3; i < 6; i++) {
-      obj.vertices[i] = parsedVertex[i - 3];
-    }
-  }
-
-  glObjects.objects[glObjects.objects.length - 1] = obj;
-
-  glObjects.renderAll();
-}
-
 var upload = document.getElementById('inputfile');
   
   // Make sure the DOM element exists
@@ -212,12 +166,15 @@ var upload = document.getElementById('inputfile');
           var result = JSON.parse(reader.result); // Parse the result into an object 
           
           console.log(result);
-          // console.log(result.model);
-          // console.log(result.vertices);
-          // console.log(result.color);
           for (let j=0; j<result.length; j++) {
             if (result[j].model == "Line") {
-              glObjects.push(new Line(result[j].vertices, result[j].color));
+              var firstPoint = []; 
+              var secondPoint = []; 
+              for (let i = 0; i < result[j].vertices.length; i++) {
+                firstPoint.push(result[j].vertices[i]);
+                secondPoint.push(result[j].vertices[i+3]);
+              }
+              glObjects.push(new Line(firstPoint, secondPoint, result[j].color));
               glObjects.renderAll();
             } else {
               glObjects.push(new Polygon(result[j].vertices, result[j].color));
