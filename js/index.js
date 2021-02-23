@@ -131,27 +131,38 @@ function editLine(x) {
   glObjects.renderAll();
 }
 
-document.getElementById('inputfile').addEventListener('change', function() {   
-  var fr = new FileReader(); 
-  fr.onload = function(){ 
-      var inputValue = fr.result.split('\n');
-      var color = inputValue.pop();
-      var parsedInput = [];
-      var parsedVertex = [];
-      inputValue.forEach(element1 => {
-        parsedInput = element1.split(' ');
-        parsedInput.forEach(element2 => {
-          parsedVertex.push(parseFloat(element2));
+var upload = document.getElementById('inputfile');
+  
+  // Make sure the DOM element exists
+  if (upload) 
+  {
+    upload.addEventListener('change', function() {
+      // Make sure a file was selected
+      if (upload.files.length > 0) 
+      {
+        var reader = new FileReader(); // File reader to read the file 
+        
+        // This event listener will happen when the reader has read the file
+        reader.addEventListener('load', function() {
+          var result = JSON.parse(reader.result); // Parse the result into an object 
+          
+          console.log(result);
+          console.log(result.model);
+          console.log(result.vertices);
+          console.log(result.color);
+          
+          if (result.model == "Line") {
+            glObjects.push(new Line(result.vertices, result.color));
+            glObjects.renderAll();
+          }
         });
-      });
-      console.log(parsedVertex);
-      console.log(color);
-      glObjects.push(new Line(parsedVertex, color));
-      glObjects.renderAll();
-      
-  } 
-  fr.readAsText(this.files[0]); 
-})
+
+        reader.readAsText(upload.files[0]); // Read the uploaded file
+      }
+    });
+
+  }
+
 
 class glObjects {
   constructor(controlPoint) {
@@ -169,6 +180,7 @@ class glObjects {
       ? this.objects.filter((obj) => obj.isCoordinateInside(canvasCoordinate))
       : [];
     this.selectedObject = result.length ? result[0] : null;
+    console.log(this.selectedObject);
   }
 
   updateSelectedObjectColor() {
