@@ -1,13 +1,13 @@
 class Hexagon {
-    constructor(color = "#000000") {
+    constructor(centerPoint, color = "#000000") {
         // Titik titik
         this.vertices = [
-            -0.05, 0.1, 0,
-            -0.1, 0, 0,
-            -0.05, -0.1, 0,
-            0.05, -0.1, 0,
-            0.1, 0, 0,
-            0.05, 0.1, 0
+            -0.05+centerPoint.x, 0.1+centerPoint.y, 0,
+            -0.1+centerPoint.x, 0+centerPoint.y, 0,
+            -0.05+centerPoint.x, -0.1+centerPoint.y, 0,
+            0.05+centerPoint.x, -0.1+centerPoint.y, 0,
+            0.1+centerPoint.x, 0+centerPoint.y, 0,
+            0.05+centerPoint.x, 0.1+centerPoint.y, 0,
         ];
 
         this.color = color;
@@ -28,17 +28,17 @@ class Hexagon {
 }
 
 class Octagon {
-    constructor(color = "#000000") {
+    constructor(centerPoint, color = "#000000") {
         // Titik titik
         this.vertices = [
-            -0.25, 0.5, 0,
-            -0.5, 0.25, 0,
-            -0.5, -0.25, 0,
-            -0.25, -0.5, 0,
-            0.25, -0.5, 0,
-            0.5, -0.25, 0,
-            0.5, 0.25, 0,
-            0.25, 0.5, 0,
+            -0.05+centerPoint.x, 0.1+centerPoint.y, 0,
+            -0.1+centerPoint.x, 0.05+centerPoint.y, 0,
+            -0.1+centerPoint.x, -0.05+centerPoint.y, 0,
+            -0.05+centerPoint.x, -0.1+centerPoint.y, 0,
+            0.05+centerPoint.x, -0.1+centerPoint.y, 0,
+            0.1+centerPoint.x, -0.05+centerPoint.y, 0,
+            0.1+centerPoint.x, 0.05+centerPoint.y, 0,
+            0.05+centerPoint.x, 0.1+centerPoint.y, 0,
         ];
 
         this.color = color;
