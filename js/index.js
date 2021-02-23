@@ -128,7 +128,7 @@ function editLine(x) {
 
   glObjects.objects[glObjects.objects.length - 1] = obj;
 
-  glObjects.update();
+  glObjects.renderAll();
 }
 
 document.getElementById('inputfile').addEventListener('change', function() {   
