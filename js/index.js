@@ -10,6 +10,12 @@ const MODE = {
   UPDATE_COLOR: "UPDATE_COLOR"
 };
 
+const MODEL = {
+  LINE: "LINE",
+  SQUARE: "SQUARE",
+  POLYGON: "POLYGON"
+}
+
 function getSquareSize(inputId = SQUARE_SIZE_ID) {
   return document.getElementById(inputId).value / 100;
 }
@@ -37,35 +43,44 @@ document.getElementById(WEBGL_CANVAS_ID).onmousemove = function (event) {
     event.clientX,
     event.clientY
   );
-  glObjects.controlPoint.move(translatedMidPoint.x, translatedMidPoint.y);
+  glObjects.controlPoint.move(translatedMidPoint);
   if (getMode() === MODE.MOVE && glObjects.selectedObject) {
+    console.log(glObjects.selectedObject);
     glObjects.selectedObject.move(translatedMidPoint);
   }
   glObjects.renderAll();
 };
 
 document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
-  const translatedMidPoint = convertClientPosToCanvasPoint(
+  const cursorPoint = convertClientPosToCanvasPoint(
     event.clientX,
     event.clientY
   );
+  if (glObjects.selectedModel === MODEL.SQUARE || glObjects.selectedModel === MODEL.POLYGON) {
+    handleCanvasClickForSquareAndPolygon(cursorPoint);
+  } else if (glObjects.selectedModel === MODEL.LINE) {
+    handleCanvasClickForLine(cursorPoint);
+  }
+};
+
+function handleCanvasClickForSquareAndPolygon(cursorPoint) {
   if (getMode() === MODE.CREATE) {
     glObjects.push(
       new Square(
-        translatedMidPoint,
+        cursorPoint,
         getSquareSize(),
         glObjects.controlPoint.color
       )
-      // new Hexagon(translatedMidPoint, glObjects.controlPoint.color)
-      // new Octagon(translatedMidPoint, glObjects.controlPoint.color)
+      // new Hexagon(cursorPoint, glObjects.controlPoint.color)
+      // new Octagon(cursorPoint, glObjects.controlPoint.color)
     );
     glObjects.renderAll();
   } else if (getMode() === MODE.MOVE) {
     glObjects.selectedObject
       ? glObjects.updateSelectedObject(null)
-      : glObjects.updateSelectedObject(translatedMidPoint);
+      : glObjects.updateSelectedObject(cursorPoint);
   } else if (getMode() === MODE.UPDATE_COLOR || getMode() === MODE.RESIZE) {
-    glObjects.updateSelectedObject(translatedMidPoint);
+    glObjects.updateSelectedObject(cursorPoint);
     if (getMode() === MODE.UPDATE_COLOR) {
       glObjects.updateSelectedObjectColor();
       glObjects.updateSelectedObject(null);
@@ -73,7 +88,22 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
       glObjects.resizeSelectedObject();
     }
   }
-};
+}
+
+function handleCanvasClickForLine(cursorPoint) {
+  if (getMode() === MODE.CREATE) {
+    if (glObjects.linePoints.length) {
+      glObjects.push(new Line(glObjects.linePoints[0], cursorPoint, glObjects.controlPoint.color));
+      glObjects.linePoints.pop();
+    } else {
+      glObjects.linePoints.push(cursorPoint);
+    }
+  } else if (getMode() === MODE.MOVE) {
+    glObjects.selectedObject
+      ? glObjects.updateSelectedObject(null)
+      : glObjects.updateSelectedObject(cursorPoint);
+  }
+}
 
 document.getElementById(COLOR_PICKER_ID).onchange = function () {
   glObjects.controlPoint.color = this.value;
@@ -175,6 +205,8 @@ class glObjects {
     this.controlPoint = controlPoint;
     this.selectedObject = null;
     this.objects = [];
+    this.selectedModel = MODEL.LINE;
+    this.linePoints = [];
   }
 
   push(glObject) {
@@ -185,8 +217,12 @@ class glObjects {
     const result = canvasCoordinate
       ? this.objects.filter((obj) => obj.isCoordinateInside(canvasCoordinate))
       : [];
-    this.selectedObject = result.length ? result[0] : null;
-    console.log(this.selectedObject);
+    if (this.selectedModel === MODEL.SQUARE || this.selectedModel === MODEL.POLYGON) {
+      this.selectedObject = result.length ? result[0] : null;
+    } else {
+      this.selectedObject = result.length ? result[0].getClosestPoint(canvasCoordinate) : null;
+      console.log(this.selectedObject);
+    }
   }
 
   updateSelectedObjectColor() {
