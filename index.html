@@ -10,11 +10,7 @@
 </head>
 
 <body>
-  <div> 
-    <h1 class="title">Tugas 1 IF3260</h1>
-  </div>
-  <div>
-    <input type="file" name="inputfile" id="inputfile">
+  <input type="file" name="inputfile" id="inputfile">
     <!-- <p id="output"></p> -->
 
     <h3>Input Line</h3>
@@ -23,20 +19,43 @@
     <label for="vertex2">Titik 2</label>
     <input type="text" name="vertex2" id="vertex2">
     <button onclick="drawLine()">Draw Line!</button>
-    
     <h3>Change Line</h3>
     <label for="newvertex">Titik Baru</label>
     <input type="text" name="newvertex" id="newvertex">
     <button onclick="editLine(1)" id="newvertex1">Ubah titik 1</button>
     <button onclick="editLine(2)" id="newvertex2">Ubah titik 2</button>
-
+  <div class="container"> 
+    <h1 class="title">Tugas 1 IF3260</h1>
+    <div class="input-group">
+      <div class="field">
+        <label for="colorPicker">Color : </label>
+        <input id="colorPicker" name="colorPicker" type="color" value="#000000">
+      </div>
+      <div class="field">
+        <label for="squareSize">Size : </label>
+        <input name="squareSize" id="squareSize" type="range" min="0" max="100" value="25">
+      </div>
+    </div>
+    <p id="anyObjectSelected"></p>
+    <div class="input-group">
+      <span>Mode : </span>
+      <input type="radio" id="create" name="mode" value="CREATE" checked>
+      <label for="create">Create</label>
+      <input type="radio" id="move" name="mode" value="MOVE">
+      <label for="edit">Move</label>
+      <input type="radio" id="resize" name="mode" value="RESIZE">
+      <label for="resize">Resize</label>
+      <input type="radio" id="updateColor" name="mode" value="UPDATE_COLOR">
+      <label for="resize">Update Color</label>
+    </div>
+    <canvas width="800" height="800" id="webgl-canvas">
+      Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
   </div>
-  <div class="container">
-    <canvas width="1200" height="800" id="webgl-canvas"></canvas>
-  </div>
-  <script type="text/javascript" src="js/index.js"></script>
-  <script type="text/javascript" src="js/utils.js"></script>
-  <script type="text/javascript" src="js/model/Line.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/model/Point.js"></script>
+  <script src="js/model/Square.js"></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background-color: #6495ed;
+  background-color: #d39a4f;
 }
 
 .container {
@@ -14,7 +14,23 @@ body {
   text-align: center;
 }
 
+.input-group {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8px;
+}
+
 #webgl-canvas {
   border-radius: 12px;
-  background-color: #f0f0f0;
+}
+
+#anyObjectSelected {
+  margin-top: 0;
+  margin-bottom: 6px;
 }
