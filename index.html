@@ -23,6 +23,13 @@
     <label for="vertex2">Titik 2</label>
     <input type="text" name="vertex2" id="vertex2">
     <button onclick="drawLine()">Draw Line!</button>
+    
+    <h3>Change Line</h3>
+    <label for="newvertex">Titik Baru</label>
+    <input type="text" name="newvertex" id="newvertex">
+    <button onclick="editLine(1)" id="newvertex1">Ubah titik 1</button>
+    <button onclick="editLine(2)" id="newvertex2">Ubah titik 2</button>
+
   </div>
   <div class="container">
     <canvas width="1200" height="800" id="webgl-canvas"></canvas>
