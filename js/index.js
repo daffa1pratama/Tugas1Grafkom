@@ -2,6 +2,9 @@ const WEBGL_CANVAS_ID = "webgl-canvas";
 const COLOR_PICKER_ID = "colorPicker";
 const SQUARE_SIZE_ID = "squareSize";
 const MODE_NAME = "mode";
+let nVertexPolygon;
+let nClicked = 0;
+let isOnDrawing = false;
 
 const MODE = {
   CREATE: "CREATE",
@@ -50,15 +53,41 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
     event.clientY
   );
   if (getMode() === MODE.CREATE) {
-    glObjects.push(
-      new Square(
-        translatedMidPoint,
-        getSquareSize(),
-        glObjects.controlPoint.color
-      )
-      // new Hexagon(translatedMidPoint, glObjects.controlPoint.color)
-      // new Octagon(translatedMidPoint, glObjects.controlPoint.color)
-    );
+    let input_model = document.getElementById("input-model").value;
+    if (input_model == "square") {
+      glObjects.push(
+        new Square(
+          translatedMidPoint,
+          getSquareSize(),
+          glObjects.controlPoint.color
+      ));
+    } else if (input_model == "hexagon") {
+      glObjects.push(
+        new Hexagon(
+          translatedMidPoint,
+          glObjects.controlPoint.color
+      ));
+    } else if (input_model == "octagon") {
+      glObjects.push(
+        new Octagon(
+          translatedMidPoint,
+          glObjects.controlPoint.color
+      ));
+    } else {
+        if(isOnDrawing) {
+          glObjects.pushPolygonVertex(translatedMidPoint);
+          console.log(translatedMidPoint);
+          nClicked += 1;
+          console.log(nClicked);
+        }
+        if(nClicked == nVertexPolygon) {
+          isOnDrawing = false;
+          nClicked = 0;
+          glObjects.push(new Polygon(glObjects.vertexPolygon, glObjects.controlPoint.color));
+          glObjects.vertexPolygon = [];
+        }
+    }
+
     glObjects.renderAll();
   } else if (getMode() === MODE.MOVE) {
     glObjects.selectedObject
@@ -169,12 +198,31 @@ var upload = document.getElementById('inputfile');
 
   }
 
+document.getElementById("input-model").onchange = function() {
+  if(document.getElementById("input-model").value == "polygon"){
+    document.getElementById("nVertex-container").innerHTML = '<br> <label>Jml Vertex</label> <input type="number" id="nVertex" min="3" value="3"> <button onclick="onDrawPolygon()">Draw Polygon!</button>';
+  } else {
+    document.getElementById("nVertex-container").innerHTML = '';
+  }
+}
+
+function onDrawPolygon() {
+  nVertexPolygon = document.getElementById("nVertex").value;
+  isOnDrawing = true;
+}
 
 class glObjects {
   constructor(controlPoint) {
     this.controlPoint = controlPoint;
     this.selectedObject = null;
     this.objects = [];
+    this.vertexPolygon = [];
+  }
+
+  pushPolygonVertex(clickedpoint){
+    this.vertexPolygon.push(clickedpoint.x);
+    this.vertexPolygon.push(clickedpoint.y);
+    this.vertexPolygon.push(0);
   }
 
   push(glObject) {
