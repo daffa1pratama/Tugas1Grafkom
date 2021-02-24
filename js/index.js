@@ -227,7 +227,7 @@ class glObjects {
     const result = canvasCoordinate
       ? this.objects.filter((obj) => obj.isCoordinateInside(canvasCoordinate))
       : [];
-    if (this.selectedModel === MODEL.SQUARE || this.selectedModel === MODEL.POLYGON) {
+    if (this.selectedModel === MODEL.SQUARE || this.selectedModel === MODEL.POLYGON || this.selectedModel === MODEL.HEXAGON || this.selectedModel === MODEL.OCTAGON) {
       this.selectedObject = result.length ? result[0] : null;
     } else {
       this.selectedObject = result.length ? result[0].getClosestPoint(canvasCoordinate) : null;
