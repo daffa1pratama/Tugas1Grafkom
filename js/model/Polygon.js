@@ -260,7 +260,7 @@ class Polygon {
         let a1 = this.area(canvasCoordinate.x, canvasCoordinate.y, arr_point[1].x, arr_point[1].y, arr_point[2].x, arr_point[2].y);
         let a2 = this.area(arr_point[0].x, arr_point[0].y, canvasCoordinate.x, canvasCoordinate.y, arr_point[2].x, arr_point[2].y);
         let a3 = this.area(arr_point[0].x, arr_point[0].y, arr_point[1].x, arr_point[1].y, canvasCoordinate.x, canvasCoordinate.y);
-        return a == (a1+a2+a3) ? true : false;
+        return a.toFixed(2) === (a1+a2+a3).toFixed(2);
     }
 
     area(x1, y1, x2, y2, x3, y3) {

@@ -2,6 +2,8 @@ const WEBGL_CANVAS_ID = "webgl-canvas";
 const COLOR_PICKER_ID = "colorPicker";
 const SQUARE_SIZE_ID = "squareSize";
 const INPUT_MODEL_ID = "input-model";
+const SAVE_FILENAME_ID = "filename";
+const ANY_OBJECT_SELECTED_ID = "anyObjectSelected";
 const MODE_NAME = "mode";
 
 let nVertexPolygon;
@@ -52,7 +54,6 @@ document.getElementById(WEBGL_CANVAS_ID).onmousemove = function (event) {
   );
   glObjects.controlPoint.move(translatedMidPoint);
   if (getMode() === MODE.MOVE && glObjects.selectedObject) {
-    console.log(glObjects.selectedObject);
     glObjects.selectedObject.move(translatedMidPoint);
   }
   glObjects.renderAll();
@@ -95,9 +96,7 @@ function handleCanvasClickForSquareAndPolygon(cursorPoint) {
     } else {
         if(isOnDrawing) {
           glObjects.pushPolygonVertex(cursorPoint);
-          console.log(cursorPoint);
           nClicked += 1;
-          console.log(nClicked);
         }
         if(nClicked == nVertexPolygon) {
           isOnDrawing = false;
@@ -153,12 +152,10 @@ document.getElementById(SQUARE_SIZE_ID).oninput = function () {
 var upload = document.getElementById('inputfile');
   
   // Make sure the DOM element exists
-  if (upload) 
-  {
+  if (upload) {
     upload.addEventListener('change', function() {
       // Make sure a file was selected
-      if (upload.files.length > 0) 
-      {
+      if (upload.files.length > 0) {
         var reader = new FileReader(); // File reader to read the file 
         
         // This event listener will happen when the reader has read the file
@@ -191,7 +188,7 @@ var upload = document.getElementById('inputfile');
 document.getElementById(INPUT_MODEL_ID).onchange = function() {
   glObjects.selectedModel = document.getElementById(INPUT_MODEL_ID).value;
   if(glObjects.selectedModel == MODEL.POLYGON){
-    document.getElementById("nVertex-container").innerHTML = '<br> <label>Jml Vertex</label> <input type="number" id="nVertex" min="3" value="3"> <button onclick="onDrawPolygon()">Draw Polygon!</button>';
+    document.getElementById("nVertex-container").innerHTML = '<br> <label>Jumlah Vertex</label> <input type="number" id="nVertex" min="3" value="3"> <button onclick="onDrawPolygon()">Draw Polygon!</button>';
   } else {
     document.getElementById("nVertex-container").innerHTML = '';
   }
@@ -230,7 +227,6 @@ class glObjects {
       this.selectedObject = result.length ? result[0] : null;
     } else {
       this.selectedObject = result.length ? result[0].getClosestPoint(canvasCoordinate) : null;
-      console.log(this.selectedObject);
     }
   }
 
@@ -246,14 +242,18 @@ class glObjects {
     this.objects.forEach(object => object.render());
   }
 
+  save() {
+    return this.objects.map(obj => obj.toJson());
+  }
+
   renderAll() {
     clearCanvas();
     this.controlPoint.render();
     this.objects.forEach((object) => object.render());
     if (this.selectedObject) {
-      document.getElementById("anyObjectSelected").innerHTML = '<b>An Object has Selected!</b>';
+      document.getElementById(ANY_OBJECT_SELECTED_ID).innerHTML = '<b>An Object has Selected!</b>';
     } else {
-      document.getElementById("anyObjectSelected").innerHTML = 'No Object has Selected';
+      document.getElementById(ANY_OBJECT_SELECTED_ID).innerHTML = 'No Object has Selected';
     }
   }
 }
@@ -270,12 +270,11 @@ var saveData = (function () {
   document.body.appendChild(a); 
   a.style = "display: none";
   return function () { 
-      const data = glObjects.objects.map(obj => obj.toJson());
-      var json = JSON.stringify(data),
+      var json = JSON.stringify(glObjects.save()),
           blob = new Blob([json], {type: "application/json"}), 
           url = window.URL.createObjectURL(blob); 
       a.href = url; 
-      a.download = "save.json"; 
+      a.download = document.getElementById(SAVE_FILENAME_ID).value;
       a.click(); 
       window.URL.revokeObjectURL(url); 
   }; 

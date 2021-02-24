@@ -10,11 +10,24 @@
 </head>
 
 <body>
-  ,<button onclick="saveData()">SAVE</button>
-  <input type="file" name="inputfile" id="inputfile">
-  <!-- <p id="output"></p> -->
   <div class="container"> 
     <h1 class="title">Tugas 1 IF3260</h1>
+    <div class="input-group">
+      <div class="field">
+        <label for="filename">Filename: </label>
+        <input type="text" id="filename">
+      </div>
+      <div class="field">
+        <button name="save" id="save" onclick="saveData()">SAVE</button>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="field">
+        <label for="inputfile">Read File: </label>
+        <input type="file" name="inputfile" id="inputfile">
+        <button class="btn-to-home"><a href="help.html" target="_blank">Help</a></button>
+      </div>
+    </div>
     <div class="input-group">
       <div class="field">
         <label for="colorPicker">Color : </label>
