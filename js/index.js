@@ -3,6 +3,7 @@ const COLOR_PICKER_ID = "colorPicker";
 const SQUARE_SIZE_ID = "squareSize";
 const INPUT_MODEL_ID = "input-model";
 const SAVE_FILENAME_ID = "filename";
+const ANY_OBJECT_SELECTED_ID = "anyObjectSelected";
 const MODE_NAME = "mode";
 
 let nVertexPolygon;
@@ -95,9 +96,7 @@ function handleCanvasClickForSquareAndPolygon(cursorPoint) {
     } else {
         if(isOnDrawing) {
           glObjects.pushPolygonVertex(cursorPoint);
-          console.log(cursorPoint);
           nClicked += 1;
-          console.log(nClicked);
         }
         if(nClicked == nVertexPolygon) {
           isOnDrawing = false;
@@ -163,7 +162,6 @@ var upload = document.getElementById('inputfile');
         reader.addEventListener('load', function() {
           var result = JSON.parse(reader.result); // Parse the result into an object 
           
-          console.log(result);
           for (let j=0; j<result.length; j++) {
             if (result[j].model == "Line") {
               var firstPoint = []; 
@@ -229,7 +227,6 @@ class glObjects {
       this.selectedObject = result.length ? result[0] : null;
     } else {
       this.selectedObject = result.length ? result[0].getClosestPoint(canvasCoordinate) : null;
-      console.log(this.selectedObject);
     }
   }
 
@@ -245,14 +242,18 @@ class glObjects {
     this.objects.forEach(object => object.render());
   }
 
+  save() {
+    return this.objects.map(obj => obj.toJson());
+  }
+
   renderAll() {
     clearCanvas();
     this.controlPoint.render();
     this.objects.forEach((object) => object.render());
     if (this.selectedObject) {
-      document.getElementById("anyObjectSelected").innerHTML = '<b>An Object has Selected!</b>';
+      document.getElementById(ANY_OBJECT_SELECTED_ID).innerHTML = '<b>An Object has Selected!</b>';
     } else {
-      document.getElementById("anyObjectSelected").innerHTML = 'No Object has Selected';
+      document.getElementById(ANY_OBJECT_SELECTED_ID).innerHTML = 'No Object has Selected';
     }
   }
 }
@@ -269,8 +270,7 @@ var saveData = (function () {
   document.body.appendChild(a); 
   a.style = "display: none";
   return function () { 
-      const data = glObjects.objects.map(obj => obj.toJson());
-      var json = JSON.stringify(data),
+      var json = JSON.stringify(glObjects.save()),
           blob = new Blob([json], {type: "application/json"}), 
           url = window.URL.createObjectURL(blob); 
       a.href = url; 
