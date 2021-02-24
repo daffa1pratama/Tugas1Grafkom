@@ -166,21 +166,20 @@ var upload = document.getElementById('inputfile');
           var result = JSON.parse(reader.result); // Parse the result into an object 
           
           console.log(result);
-          for (let j=0; j<result.length; j++) {
-            if (result[j].model == "Line") {
-              var firstPoint = []; 
-              var secondPoint = []; 
-              for (let i = 0; i < result[j].vertices.length; i++) {
-                firstPoint.push(result[j].vertices[i]);
-                secondPoint.push(result[j].vertices[i+3]);
-              }
-              glObjects.push(new Line(firstPoint, secondPoint, result[j].color));
-              glObjects.renderAll();
+          result.forEach(obj => {
+            if (obj.model === MODEL.LINE) {
+              glObjects.push(new Line(obj.firstPoint, obj.secondPoint, obj.color));
+            } else if (obj.model === MODEL.SQUARE) {
+              glObjects.push(new Square(new Point(obj.centerPoint.x, obj.centerPoint.y), obj.size, obj.color));
+            } else if (obj.model == MODEL.HEXAGON) {
+              glObjects.push(new Hexagon(new Point(obj.centerPoint.x, obj.centerPoint.y), obj.color));
+            } else if (obj.model == MODEL.OCTAGON) {
+              glObjects.push(new Octagon(new Point(obj.centerPoint.x, obj.centerPoint.y), obj.color));
             } else {
-              glObjects.push(new Polygon(result[j].vertices, result[j].color));
-              glObjects.renderAll();
+              glObjects.push(new Polygon(obj.vertices, obj.color));
             }
-          }
+          });
+          glObjects.renderAll();
         });
 
         reader.readAsText(upload.files[0]); // Read the uploaded file

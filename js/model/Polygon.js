@@ -70,6 +70,14 @@ class Hexagon {
         associateShaderToObjBuffer(shaderProgram, vertexBuffer, false);
         gl.drawArrays( gl.TRIANGLE_FAN, 0, 6);
     }
+
+    toJson() {
+        return {
+          model: MODEL.HEXAGON,
+          centerPoint: this.centerPoint,
+          color: this.color
+        }
+    }
 }
 
 class Octagon {
@@ -150,6 +158,14 @@ class Octagon {
         associateShaderToObjBuffer(shaderProgram, vertexBuffer, false);
         gl.drawArrays( gl.TRIANGLE_FAN, 0, 8);
     }
+
+    toJson() {
+        return {
+          model: MODEL.OCTAGON,
+          centerPoint: this.centerPoint,
+          color: this.color
+        }
+    }
 }
 
 class Polygon {
@@ -213,6 +229,7 @@ class Polygon {
         let arr_point = convertVerticesToPoint(this.vertices);
         let nVertex = arr_point.length;
         if (nVertex == 3) {
+            console.log(this.isInsideTriangle(arr_point, canvasCoordinate));
             return this.isInsideTriangle(arr_point, canvasCoordinate);
         }
         for(let k=1; k<nVertex; k++) {
@@ -263,6 +280,14 @@ class Polygon {
         const shaderProgram = createShaderProgram(vertexShader, fragmentShader);
         associateShaderToObjBuffer(shaderProgram, vertexBuffer, false);
         gl.drawArrays( gl.TRIANGLE_FAN, 0, this.vertices.length / 3);
+    }
+
+    toJson() {
+        return {
+          model: MODEL.POLYGON,
+          vertices: this.vertices,
+          color: this.color
+        }
     }
 }
 
