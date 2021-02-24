@@ -239,7 +239,7 @@ class Polygon {
             }
             if ((canvasCoordinate.y > min(vertex1.y, vertex2.y)) && (canvasCoordinate.y <= max(vertex1.y, vertex2.y)) && (canvasCoordinate.x <= max(vertex1.x, vertex2.x)) && vertex1.y != vertex2.y) {
                 let x_intersection = (canvasCoordinate.y - vertex1.y) * (vertex2.x - vertex1.x) / (vertex2.y - vertex1.y) + vertex1.x;
-                if (x_intersection == canvasCoordinate.x) {
+                if (x_intersection.toFixed(2) == (canvasCoordinate.x).toFixed(2)) {
                     return true;
                 }
                 if (vertex1.x == vertex2.x || canvasCoordinate.x <= x_intersection) {
