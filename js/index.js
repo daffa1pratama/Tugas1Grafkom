@@ -1,7 +1,9 @@
 const WEBGL_CANVAS_ID = "webgl-canvas";
 const COLOR_PICKER_ID = "colorPicker";
 const SQUARE_SIZE_ID = "squareSize";
+const INPUT_MODEL_ID = "input-model";
 const MODE_NAME = "mode";
+
 let nVertexPolygon;
 let nClicked = 0;
 let isOnDrawing = false;
@@ -12,6 +14,14 @@ const MODE = {
   RESIZE: "RESIZE",
   UPDATE_COLOR: "UPDATE_COLOR"
 };
+
+const MODEL = {
+  LINE: "LINE",
+  SQUARE: "SQUARE",
+  POLYGON: "POLYGON",
+  HEXAGON: "HEXAGON",
+  OCTAGON: "OCTAGON"
+}
 
 function getSquareSize(inputId = SQUARE_SIZE_ID) {
   return document.getElementById(inputId).value / 100;
@@ -40,43 +50,52 @@ document.getElementById(WEBGL_CANVAS_ID).onmousemove = function (event) {
     event.clientX,
     event.clientY
   );
-  glObjects.controlPoint.move(translatedMidPoint.x, translatedMidPoint.y);
+  glObjects.controlPoint.move(translatedMidPoint);
   if (getMode() === MODE.MOVE && glObjects.selectedObject) {
+    console.log(glObjects.selectedObject);
     glObjects.selectedObject.move(translatedMidPoint);
   }
   glObjects.renderAll();
 };
 
 document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
-  const translatedMidPoint = convertClientPosToCanvasPoint(
+  const cursorPoint = convertClientPosToCanvasPoint(
     event.clientX,
     event.clientY
   );
+  if (glObjects.selectedModel === MODEL.SQUARE || glObjects.selectedModel === MODEL.POLYGON || glObjects.selectedModel === MODEL.HEXAGON || glObjects.selectedModel === MODEL.OCTAGON) {
+    handleCanvasClickForSquareAndPolygon(cursorPoint);
+  } else if (glObjects.selectedModel === MODEL.LINE) {
+    handleCanvasClickForLine(cursorPoint);
+  }
+};
+
+function handleCanvasClickForSquareAndPolygon(cursorPoint) {
   if (getMode() === MODE.CREATE) {
-    let input_model = document.getElementById("input-model").value;
-    if (input_model == "square") {
+    let input_model = glObjects.selectedModel;
+    if (input_model === MODEL.SQUARE) {
       glObjects.push(
         new Square(
-          translatedMidPoint,
+          cursorPoint,
           getSquareSize(),
           glObjects.controlPoint.color
       ));
-    } else if (input_model == "hexagon") {
+    } else if (input_model === MODEL.HEXAGON) {
       glObjects.push(
         new Hexagon(
-          translatedMidPoint,
+          cursorPoint,
           glObjects.controlPoint.color
       ));
-    } else if (input_model == "octagon") {
+    } else if (input_model === MODEL.OCTAGON) {
       glObjects.push(
         new Octagon(
-          translatedMidPoint,
+          cursorPoint,
           glObjects.controlPoint.color
       ));
     } else {
         if(isOnDrawing) {
-          glObjects.pushPolygonVertex(translatedMidPoint);
-          console.log(translatedMidPoint);
+          glObjects.pushPolygonVertex(cursorPoint);
+          console.log(cursorPoint);
           nClicked += 1;
           console.log(nClicked);
         }
@@ -92,9 +111,9 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
   } else if (getMode() === MODE.MOVE) {
     glObjects.selectedObject
       ? glObjects.updateSelectedObject(null)
-      : glObjects.updateSelectedObject(translatedMidPoint);
+      : glObjects.updateSelectedObject(cursorPoint);
   } else if (getMode() === MODE.UPDATE_COLOR || getMode() === MODE.RESIZE) {
-    glObjects.updateSelectedObject(translatedMidPoint);
+    glObjects.updateSelectedObject(cursorPoint);
     if (getMode() === MODE.UPDATE_COLOR) {
       glObjects.updateSelectedObjectColor();
       glObjects.updateSelectedObject(null);
@@ -102,7 +121,22 @@ document.getElementById(WEBGL_CANVAS_ID).onclick = function (event) {
       glObjects.resizeSelectedObject();
     }
   }
-};
+}
+
+function handleCanvasClickForLine(cursorPoint) {
+  if (getMode() === MODE.CREATE) {
+    if (glObjects.linePoints.length) {
+      glObjects.push(new Line(glObjects.linePoints[0], cursorPoint, glObjects.controlPoint.color));
+      glObjects.linePoints.pop();
+    } else {
+      glObjects.linePoints.push(cursorPoint);
+    }
+  } else if (getMode() === MODE.MOVE) {
+    glObjects.selectedObject
+      ? glObjects.updateSelectedObject(null)
+      : glObjects.updateSelectedObject(cursorPoint);
+  }
+}
 
 document.getElementById(COLOR_PICKER_ID).onchange = function () {
   glObjects.controlPoint.color = this.value;
@@ -114,52 +148,6 @@ document.getElementById(SQUARE_SIZE_ID).oninput = function () {
     glObjects.resizeSelectedObject();
     glObjects.renderAll();
   }
-}
-
-function drawLine() {
-  var vertex1 = document.getElementById("vertex1").value;
-  var vertex2 = document.getElementById("vertex2").value;
-  var parsedVertex = [];
-
-  vertex1 = vertex1.split(" ");
-  vertex1.forEach(element => {
-    parsedVertex.push(parseFloat(element));
-  });
-  
-  vertex2 = vertex2.split(" ");
-  vertex2.forEach(element => {
-    parsedVertex.push(parseFloat(element));
-  });
-  
-  glObjects.push(new Line(parsedVertex));
-  glObjects.renderAll();
-}
-
-function editLine(x) {
-  var newVertex = document.getElementById("newvertex").value;
-  var obj = glObjects.objects[glObjects.objects.length - 1];
-  console.log(obj.vertices);
-
-  var parsedVertex = [];
-
-  newVertex = newVertex.split(" ");
-  newVertex.forEach(element => {
-    parsedVertex.push(parseFloat(element));
-  });
-
-  if (x == 1) {
-    for (let i = 0; i < 3; i++) {
-      obj.vertices[i] = parsedVertex[i];
-    }
-  } else {
-    for (let i = 3; i < 6; i++) {
-      obj.vertices[i] = parsedVertex[i - 3];
-    }
-  }
-
-  glObjects.objects[glObjects.objects.length - 1] = obj;
-
-  glObjects.renderAll();
 }
 
 var upload = document.getElementById('inputfile');
@@ -178,12 +166,15 @@ var upload = document.getElementById('inputfile');
           var result = JSON.parse(reader.result); // Parse the result into an object 
           
           console.log(result);
-          // console.log(result.model);
-          // console.log(result.vertices);
-          // console.log(result.color);
           for (let j=0; j<result.length; j++) {
             if (result[j].model == "Line") {
-              glObjects.push(new Line(result[j].vertices, result[j].color));
+              var firstPoint = []; 
+              var secondPoint = []; 
+              for (let i = 0; i < result[j].vertices.length; i++) {
+                firstPoint.push(result[j].vertices[i]);
+                secondPoint.push(result[j].vertices[i+3]);
+              }
+              glObjects.push(new Line(firstPoint, secondPoint, result[j].color));
               glObjects.renderAll();
             } else {
               glObjects.push(new Polygon(result[j].vertices, result[j].color));
@@ -198,8 +189,9 @@ var upload = document.getElementById('inputfile');
 
   }
 
-document.getElementById("input-model").onchange = function() {
-  if(document.getElementById("input-model").value == "polygon"){
+document.getElementById(INPUT_MODEL_ID).onchange = function() {
+  glObjects.selectedModel = document.getElementById(INPUT_MODEL_ID).value;
+  if(glObjects.selectedModel == MODEL.POLYGON){
     document.getElementById("nVertex-container").innerHTML = '<br> <label>Jml Vertex</label> <input type="number" id="nVertex" min="3" value="3"> <button onclick="onDrawPolygon()">Draw Polygon!</button>';
   } else {
     document.getElementById("nVertex-container").innerHTML = '';
@@ -216,6 +208,8 @@ class glObjects {
     this.controlPoint = controlPoint;
     this.selectedObject = null;
     this.objects = [];
+    this.selectedModel = MODEL.LINE;
+    this.linePoints = [];
     this.vertexPolygon = [];
   }
 
@@ -233,8 +227,12 @@ class glObjects {
     const result = canvasCoordinate
       ? this.objects.filter((obj) => obj.isCoordinateInside(canvasCoordinate))
       : [];
-    this.selectedObject = result.length ? result[0] : null;
-    console.log(this.selectedObject);
+    if (this.selectedModel === MODEL.SQUARE || this.selectedModel === MODEL.POLYGON) {
+      this.selectedObject = result.length ? result[0] : null;
+    } else {
+      this.selectedObject = result.length ? result[0].getClosestPoint(canvasCoordinate) : null;
+      console.log(this.selectedObject);
+    }
   }
 
   updateSelectedObjectColor() {

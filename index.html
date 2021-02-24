@@ -11,26 +11,15 @@
 
 <body>
   <input type="file" name="inputfile" id="inputfile">
-    <!-- <p id="output"></p> -->
-
-    <h3>Input Line</h3>
-    <label for="vertex1">Titik 1</label>
-    <input type="text" name="vertex1" id="vertex1">
-    <label for="vertex2">Titik 2</label>
-    <input type="text" name="vertex2" id="vertex2">
-    <button onclick="drawLine()">Draw Line!</button>
-    <h3>Change Line</h3>
-    <label for="newvertex">Titik Baru</label>
-    <input type="text" name="newvertex" id="newvertex">
-    <button onclick="editLine(1)" id="newvertex1">Ubah titik 1</button>
-    <button onclick="editLine(2)" id="newvertex2">Ubah titik 2</button>
+  <!-- <p id="output"></p> -->
   <div>
     <h3> Select Model:</h3>
     <select id="input-model">
-      <option value="square"> Square </option>
-      <option value="hexagon"> Hexagon </option>
-      <option value="octagon"> Octagon </option>
-      <option value="polygon"> Polygon </option>
+      <option value="LINE"> Line </option>
+      <option value="SQUARE"> Square </option>
+      <option value="HEXAGON"> Hexagon </option>
+      <option value="OCTAGON"> Octagon </option>
+      <option value="POLYGON"> Polygon </option>
     </select> <br>
     <div id='nVertex-container'></div>
   </div>

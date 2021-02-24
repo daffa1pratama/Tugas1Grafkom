@@ -6,10 +6,10 @@ class Point {
     this.color = color;
   }
 
-  move(newX, newY) {
-    this.x = newX;
-    this.y = newY;
-    this.vertices =  [newX, newY, 0];
+  move(newCoordinate) {
+    this.x = newCoordinate.x;
+    this.y = newCoordinate.y;
+    this.vertices =  [newCoordinate.x, newCoordinate.y, 0];
   }
 
   render() {
