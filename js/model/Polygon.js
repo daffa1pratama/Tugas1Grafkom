@@ -30,7 +30,7 @@ class Hexagon {
         ];
     }
 
-    isCoordinateInside(canvasCoordinate) {
+    getClosestPoint(canvasCoordinate) {
         let nIntersection = 0;
         let arr_point = convertVerticesToPoint(this.vertices);
         let nVertex = arr_point.length;
@@ -110,7 +110,7 @@ class Octagon {
         ];
     }
 
-    isCoordinateInside(canvasCoordinate) {
+    getClosestPoint(canvasCoordinate) {
         let nIntersection = 0;
         let arr_point = convertVerticesToPoint(this.vertices);
         let nVertex = arr_point.length;
@@ -208,7 +208,7 @@ class Polygon {
         }
     }
 
-    isCoordinateInside(canvasCoordinate) {
+    getClosestPoint(canvasCoordinate) {
         let nIntersection = 0;
         let arr_point = convertVerticesToPoint(this.vertices);
         let nVertex = arr_point.length;
