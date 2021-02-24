@@ -10,19 +10,9 @@
 </head>
 
 <body>
+  ,<button onclick="saveData()">SAVE</button>
   <input type="file" name="inputfile" id="inputfile">
   <!-- <p id="output"></p> -->
-  <div>
-    <h3> Select Model:</h3>
-    <select id="input-model">
-      <option value="LINE"> Line </option>
-      <option value="SQUARE"> Square </option>
-      <option value="HEXAGON"> Hexagon </option>
-      <option value="OCTAGON"> Octagon </option>
-      <option value="POLYGON"> Polygon </option>
-    </select> <br>
-    <div id='nVertex-container'></div>
-  </div>
   <div class="container"> 
     <h1 class="title">Tugas 1 IF3260</h1>
     <div class="input-group">
@@ -34,7 +24,17 @@
         <label for="squareSize">Size : </label>
         <input name="squareSize" id="squareSize" type="range" min="0" max="100" value="25">
       </div>
+      <div class="field">
+        <select id="input-model">
+          <option value="LINE"> Line </option>
+          <option value="SQUARE"> Square </option>
+          <option value="HEXAGON"> Hexagon </option>
+          <option value="OCTAGON"> Octagon </option>
+          <option value="POLYGON"> Polygon </option>
+        </select>
+      </div>
     </div>
+    <div id='nVertex-container'></div>
     <p id="anyObjectSelected"></p>
     <div class="input-group">
       <span>Mode : </span>

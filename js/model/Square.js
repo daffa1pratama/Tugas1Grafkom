@@ -46,4 +46,13 @@ class Square {
     associateShaderToObjBuffer(shaderProgram, vertexBuffer, indexBuffer);
     gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
   }
+
+  toJson() {
+    return {
+      model: MODEL.SQUARE,
+      centerPoint: this.centerPoint,
+      size: this.size,
+      color: this.color
+    }
+  }
 }

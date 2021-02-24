@@ -40,4 +40,13 @@ class Line {
     associateShaderToObjBuffer(shaderProgram, vertexBuffer);
     gl.drawArrays(gl.LINES, 0, 2);
   }
+
+  toJson() {
+    return {
+      model: MODEL.LINE,
+      firstPoint: this.firstPoint,
+      secondPoint: this.secondPoint,
+      color: this.color
+    }
+  }
 }

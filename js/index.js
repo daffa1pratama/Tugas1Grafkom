@@ -265,3 +265,19 @@ gl.viewport(0, 0, canvas.width, canvas.height);
 gl.enable(gl.DEPTH_TEST);
 glObjects = new glObjects((controlPoint = new Point(0, 0)));
 glObjects.renderAll();
+
+var saveData = (function () { 
+  var a = document.createElement("a"); 
+  document.body.appendChild(a); 
+  a.style = "display: none";
+  return function () { 
+      const data = glObjects.objects.map(obj => obj.toJson());
+      var json = JSON.stringify(data),
+          blob = new Blob([json], {type: "application/json"}), 
+          url = window.URL.createObjectURL(blob); 
+      a.href = url; 
+      a.download = "save.json"; 
+      a.click(); 
+      window.URL.revokeObjectURL(url); 
+  }; 
+}()); 
