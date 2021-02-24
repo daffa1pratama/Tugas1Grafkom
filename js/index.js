@@ -161,11 +161,11 @@ var upload = document.getElementById('inputfile');
         // This event listener will happen when the reader has read the file
         reader.addEventListener('load', function() {
           var result = JSON.parse(reader.result); // Parse the result into an object 
-          
-          console.log(result);
+          glObjects.clearObjects();
+
           result.forEach(obj => {
             if (obj.model === MODEL.LINE) {
-              glObjects.push(new Line(obj.firstPoint, obj.secondPoint, obj.color));
+              glObjects.push(new Line(new Point(obj.firstPoint.x, obj.firstPoint.y), new Point(obj.secondPoint.x, obj.secondPoint.y), obj.color));
             } else if (obj.model === MODEL.SQUARE) {
               glObjects.push(new Square(new Point(obj.centerPoint.x, obj.centerPoint.y), obj.size, obj.color));
             } else if (obj.model == MODEL.HEXAGON) {
@@ -244,6 +244,10 @@ class glObjects {
 
   save() {
     return this.objects.map(obj => obj.toJson());
+  }
+
+  clearObjects() {
+    this.objects = [];
   }
 
   renderAll() {

@@ -229,7 +229,6 @@ class Polygon {
         let arr_point = convertVerticesToPoint(this.vertices);
         let nVertex = arr_point.length;
         if (nVertex == 3) {
-            console.log(this.isInsideTriangle(arr_point, canvasCoordinate));
             return this.isInsideTriangle(arr_point, canvasCoordinate);
         }
         for(let k=1; k<nVertex; k++) {
